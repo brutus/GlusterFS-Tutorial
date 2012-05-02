@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Intro &mdash; GlusterFS Tutorial 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlusterFS Tutorial 0.1 documentation" href="index.html" />
+    <link rel="next" title="Übersicht" href="Overview.html" />
+    <link rel="prev" title="GlusterFS Tutorial" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="Übersicht"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="GlusterFS Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GlusterFS Tutorial 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="intro">
+<h1>Intro<a class="headerlink" href="#intro" title="Permalink to this headline">¶</a></h1>
+<p>Ein <em>GlusterFS Volume</em> fast Speicherplatz von beliebigen Servern zusammen.</p>
+<p>Du musst dafür <strong>keine</strong> Partitionen auf den Servern anlegen, ein <em>leeres</em>
+Verzeichnis reicht. Es ist auch egal, ob die Verzeichnisse auf den Servern
+gleich heißen, gleich viel Speicherplatz frei haben, usw.</p>
+<blockquote>
+<div>Hast du zB. ein Verzeichnis mit 80 GB auf einem Server und eins mit 40 GB
+auf einem anderen, kannst du daraus ein 120 GB Volume machen.</div></blockquote>
+<p>Außerdem beherrscht GlusterFS auch <strong>Striping</strong> und <strong>Mirroring</strong>.</p>
+<p>Striping entspricht ~ RAID 0, dadurch wird jede einzelne Datei auf mehrere
+Server aufgeteilt, damit sie schneller <em>geschrieben</em> und <em>gelesen</em> werden
+kann (nett zB. bei vielen großen Dateien). Mirroring entspricht ~ RAID 1,
+es spiegelt die Dateien über mehrere Server (<em>Datensicherheit</em> und
+<em>schnellere Lese-Zugriffe</em>).</p>
+<div class="section" id="beispiel">
+<h2>Beispiel<a class="headerlink" href="#beispiel" title="Permalink to this headline">¶</a></h2>
+<p>In dem Beispiel in diesem Tutorial gehe ich von 4 Servern aus:
+<tt class="docutils literal"><span class="pre">s{1,2,3,4}.test</span></tt>, auf denen jeweils 250 GB frei sind (und zwar in
+<tt class="docutils literal"><span class="pre">/shared</span></tt>).</p>
+<p>Wir basteln daraus ein <strong>Volume</strong>, das jeweils 2 Verzeichnisse <em>spiegelt</em>.</p>
+<p>Dh. die Verzeichnisse <tt class="docutils literal"><span class="pre">s1.test:/shared</span></tt> und <tt class="docutils literal"><span class="pre">s2.test:/shared</span></tt> sind
+untereinander gespiegelt sowie <tt class="docutils literal"><span class="pre">s3.test:/shared</span></tt> und <tt class="docutils literal"><span class="pre">s4.test:/shared</span></tt>.</p>
+<p>Die beiden Spiegel-Sets ergeben zusammen relativ ausfallsichere 500 GB.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Dass die Server und Verzeichnisse gleich heißen und in den
+Verzeichnissen zufällig auch gleich viel Platz frei ist, ist nur
+um den Text einfacher zu machen; es ist wie gesagt egal.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Solange ein Gerät per URL oder IP erreichbar ist <em>und</em> auf dem Gerät der
+<em>Gluster FS Daemon</em> läuft, kann es an Volumes teilnehmen.</p>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Intro</a><ul>
+<li><a class="reference internal" href="#beispiel">Beispiel</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">GlusterFS Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Overview.html"
+                        title="next chapter">Übersicht</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="Übersicht"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="GlusterFS Tutorial"
+             >previous</a> |</li>
+        <li><a href="index.html">GlusterFS Tutorial 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Brutus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

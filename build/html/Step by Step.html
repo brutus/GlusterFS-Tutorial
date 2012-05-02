@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Step by Step &mdash; GlusterFS Tutorial 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GlusterFS Tutorial 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Übersicht" href="Overview.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="Übersicht"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GlusterFS Tutorial 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="step-by-step">
+<h1>Step by Step<a class="headerlink" href="#step-by-step" title="Permalink to this headline">¶</a></h1>
+<p>Nach der Übersicht schauen wir uns nun die konkreten Befehle an.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Das <tt class="docutils literal"><span class="pre">#</span></tt> vor den Befehlen muss <em>nicht</em> mit eingegeben werden! Es steht da,
+um eine Root-Shell zu kennzeichnen. Bist du also nicht als <tt class="docutils literal"><span class="pre">root</span></tt>
+unterwegs, musst den den Befehlen ein <tt class="docutils literal"><span class="pre">sudo</span></tt> voranstellen.</p>
+</div>
+<div class="section" id="glusterfs-installieren">
+<h2>GlusterFS installieren<a class="headerlink" href="#glusterfs-installieren" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">glusterfs-server</span></tt></p>
+<p>Willst du den Daemon automatisch bei jeden Boot starten:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">update-rc.d</span> <span class="pre">glusterd</span> <span class="pre">defaults</span></tt></p>
+<p>Diesen Schritt musst du auf <em>jeden</em> Server durchführen! Alle weiteren nur auf
+einem der Server (egal welcher). Die Konfiguration wird automatisch unter den
+Servern verteilt.</p>
+</div>
+<div class="section" id="storage-pool-erstellen">
+<h2>Storage Pool erstellen<a class="headerlink" href="#storage-pool-erstellen" title="Permalink to this headline">¶</a></h2>
+<p>Davon ausgehend, das du auf <tt class="docutils literal"><span class="pre">s1.test</span></tt> bist, musst du <tt class="docutils literal"><span class="pre">s{2,3,4}.test</span></tt>
+bekannt machen:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">peer</span> <span class="pre">probe</span> <span class="pre">s2.test</span></tt>
+<tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">peer</span> <span class="pre">probe</span> <span class="pre">s3.test</span></tt>
+<tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">peer</span> <span class="pre">probe</span> <span class="pre">s4.test</span></tt></p>
+<p>Nun kennen sich alle Server untereinander und geben Konfigurationsanweisungen,
+etc. weiter. Ob alles geklappt hat kannst du sicherheitshalber noch schnell
+überprüfen:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">peer</span> <span class="pre">status</span></tt></p>
+</div>
+<div class="section" id="volume-erstellen">
+<h2>Volume erstellen<a class="headerlink" href="#volume-erstellen" title="Permalink to this headline">¶</a></h2>
+<p>Wir kennen die Servername und die Verzeichnisse, damit haben wir unsere
+<strong>Bricks</strong> zusammen:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">s1.test:/shared</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">s2.test:/shared</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">s3.test:/shared</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">s4.test:/shared</span></tt></li>
+</ul>
+<p>Das <strong>Volume</strong> ist schnell erstellt:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">volume</span> <span class="pre">create</span> <span class="pre">sharedstuff</span> <span class="pre">replica</span> <span class="pre">2</span> <span class="pre">s1.test:/shared</span> <span class="pre">s2.test:/shared</span> <span class="pre">s3.test:/shared</span> <span class="pre">s4.test:/shared</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Der <tt class="docutils literal"><span class="pre">replica</span> <span class="pre">2</span></tt> part sorgt dafür das jeweils 2 Verzeichnisse gespiegelt
+werden. Mit <tt class="docutils literal"><span class="pre">stripe</span> <span class="pre">2</span></tt> oder <tt class="docutils literal"><span class="pre">stripe</span> <span class="pre">4</span></tt> hättest du statt dessen <em>jede</em>
+<em>einzelne</em> Datei über 2 bzw. alle 4 Verzeichnisse aufgeteilt.</p>
+<p>Wenn du <strong>replica</strong> oder <strong>stripe</strong> benutzt, _musst_ du darauf achten, dass
+du ein Vielfaches der angegebenen Anzahl an Bricks nutzt. Bei <tt class="docutils literal"><span class="pre">replica</span> <span class="pre">2</span></tt>
+zB. also 2, 4, 6, etc. Bricks.</p>
+<p class="last">Lässt du den Part ganz weg, wird weder <em>striping</em> noch <em>mirroring</em> benutzt.
+Die Dateien werden einfach auf die verschiedenen Platten verteilt (JBOD
+like).</p>
+</div>
+<p>Nun muss das Volume nur noch aktiviert werden:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">volume</span> <span class="pre">start</span> <span class="pre">sharedstuff</span></tt></p>
+<p>Und auch hier checken wir noch schnell ob alles geklappt hat:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">gluster</span> <span class="pre">volume</span> <span class="pre">info</span> <span class="pre">sharedstuff</span></tt></p>
+<p>Hat alles geklappt ist die serverseitige Einstellung erledigt.
+Nun kannst du loslegen und das Volume benutzen.</p>
+</div>
+<div class="section" id="volume-mounten">
+<h2>Volume mounten<a class="headerlink" href="#volume-mounten" title="Permalink to this headline">¶</a></h2>
+<p>Auf jeden Client musst du die folgenden Schritte ausführen (statt dem
+GlusterFS Client kannst du auch NFS nutzen, das lass ich hier aber mal aus):</p>
+<ul>
+<li><p class="first">FUSE muss installiert sein:</p>
+<ul class="simple">
+<li>Prüfe das mit <tt class="docutils literal"><span class="pre">#</span> <span class="pre">dmesg</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">-i</span> <span class="pre">fuse</span></tt></li>
+<li>bekommst du <em>keine</em> Antwort wie <tt class="docutils literal"><span class="pre">...</span> <span class="pre">fuse</span> <span class="pre">init</span> <span class="pre">(API</span> <span class="pre">version</span> <span class="pre">7.13)</span></tt>
+musst du es aktivieren:</li>
+<li><tt class="docutils literal"><span class="pre">#</span> <span class="pre">modprobe</span> <span class="pre">fuse</span></tt></li>
+</ul>
+</li>
+<li><p class="first">Der GlusterFS Client musst installiert sein:</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">glusterfs-client</span></tt></p>
+</li>
+<li><p class="first">Nun kannst du das Volume mounten (zB. nach <tt class="docutils literal"><span class="pre">/var/shared</span></tt>):</p>
+<p><tt class="docutils literal"><span class="pre">#</span> <span class="pre">mount</span> <span class="pre">-t</span> <span class="pre">glusterfs</span> <span class="pre">s1.test:/sharedstuff</span> <span class="pre">/var/shared</span></tt></p>
+<p>Das geht natürlich auch über einen Eintrag in <tt class="docutils literal"><span class="pre">/etc/fstab</span></tt>:</p>
+<p><tt class="docutils literal"><span class="pre">s1.test:/sharedstuff</span> <span class="pre">/var/shared</span> <span class="pre">glusterfs</span> <span class="pre">defaults,_netdev</span> <span class="pre">0</span> <span class="pre">0</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">_netdev</span></tt> sorgt dafür, das es erst nach Initialisierung des Netzwerks
+gemounted wird.</p>
+</div>
+</li>
+</ul>
+<p>Der beim Mounten angegebene Server (<tt class="docutils literal"><span class="pre">s1.test</span></tt>) wird <em>nur einmal</em> benutzt, um
+die Konfiguration zu holen, danach wird automatisch per Load-Balancing, etc.
+einer der am Volume beteiligten Server benutzt. Dh. auch, dass du beim
+<tt class="docutils literal"><span class="pre">mount</span></tt> Befehl einen beliebigen Server aus dem Pool angeben kannst, auch
+einen, der nicht am zu mountenden Volume beteiligt ist.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Step by Step</a><ul>
+<li><a class="reference internal" href="#glusterfs-installieren">GlusterFS installieren</a></li>
+<li><a class="reference internal" href="#storage-pool-erstellen">Storage Pool erstellen</a></li>
+<li><a class="reference internal" href="#volume-erstellen">Volume erstellen</a></li>
+<li><a class="reference internal" href="#volume-mounten">Volume mounten</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Overview.html"
+                        title="previous chapter">Übersicht</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Step by Step.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="Übersicht"
+             >previous</a> |</li>
+        <li><a href="index.html">GlusterFS Tutorial 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Brutus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
