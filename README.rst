@@ -14,4 +14,4 @@ You can read the tutorial here:
 http://glusterfs-tutorial.readthedocs.org/
 
 
-.. GlusterFS: http://www.gluster.org/
+.. _GlusterFS: http://www.gluster.org/
