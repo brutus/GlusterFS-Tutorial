@@ -31,7 +31,9 @@ Davon ausgehend, das du auf ``s1.test`` bist, musst du ``s{2,3,4}.test``
 bekannt machen:
 
 ``# gluster peer probe s2.test``
+
 ``# gluster peer probe s3.test``
+
 ``# gluster peer probe s4.test``
 
 Nun kennen sich alle Server untereinander und geben Konfigurationsanweisungen,
