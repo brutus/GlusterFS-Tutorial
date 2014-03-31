@@ -9,9 +9,7 @@ some shared storage with GlusterFS, followed by step by step instructions.
 Online Version
 --------------
 
-You can read the tutorial here:
-
-http://glusterfs-tutorial.readthedocs.org/
+You can read the tutorial here: http://glusterfs-tutorial.readthedocs.org/
 
 Right now it's only available in *german language*.
 
