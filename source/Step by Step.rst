@@ -15,13 +15,24 @@ GlusterFS installieren
 
 ``# apt-get install glusterfs-server``
 
+Um den Server zu starten:
+
+``# service glusterd start``
+
+Und um zu schauen ob er läuft:
+
+``# service glusterd status``
+
 Willst du den Daemon automatisch bei jeden Boot starten:
 
 ``# update-rc.d glusterd defaults``
 
-Diesen Schritt musst du auf *jeden* Server durchführen! Alle weiteren nur auf
-einem der Server (egal welcher). Die Konfiguration wird automatisch unter den
-Servern verteilt.
+.. important::
+
+  Diesen Schritt musst du auf *jeden* Server durchführen!
+
+  Alle weiteren nur auf einem der Server (egal welcher).
+  Die Konfiguration wird automatisch unter den Servern verteilt.
 
 
 Storage Pool erstellen
@@ -35,6 +46,12 @@ bekannt machen:
 ``# gluster peer probe s3.test``
 
 ``# gluster peer probe s4.test``
+
+Damit die anderen Server ``s1.test`` auch *mit Namen* und nicht nur durch die
+IP kennen, musst du ``s1.test`` von *einem* der anderen Server aus bekannt
+machen:
+
+``# gluster peer probe s1.test``
 
 Nun kennen sich alle Server untereinander und geben Konfigurationsanweisungen,
 etc. weiter. Ob alles geklappt hat kannst du sicherheitshalber noch schnell
@@ -54,23 +71,33 @@ Wir kennen die Servername und die Verzeichnisse, damit haben wir unsere
 - ``s3.test:/shared``
 - ``s4.test:/shared``
 
-Das **Volume** ist schnell erstellt:
+Der Befehl zum Erstellen eines Volumes ist recht einafch:
 
-``# gluster volume create sharedstuff replica 2 s1.test:/shared s2.test:/shared s3.test:/shared s4.test:/shared``
+  ``gluster volume create <volumename> [options] <brick>...``
 
-.. note::
+Damit ist unser **Volume** schnell erstellt:
 
-   Der ``replica 2`` part sorgt dafür das jeweils 2 Verzeichnisse gespiegelt
-   werden. Mit ``stripe 2`` oder ``stripe 4`` hättest du statt dessen *jede*
-   *einzelne* Datei über 2 bzw. alle 4 Verzeichnisse aufgeteilt.
+.. code-block:: none
 
-   Wenn du **replica** oder **stripe** benutzt, _musst_ du darauf achten, dass
+   # gluster volume create sharedstuff replica 2 s1.test:/shared s2.test:/shared s3.test:/shared s4.test:/shared
+
+Der ``replica 2`` part sorgt dafür das jeweils 2 aufeinander folgende
+**Bricks** untereinander gespiegelt werden. Mit ``stripe 2`` würde statt
+dessen *jede einzelne Datei* über 2 **Bricks** aufgeteilt.
+
+Lässt du den Part ganz weg, wird weder *striping* noch *mirroring* benutzt.
+Das bedeutet, das die Dateien im Ganzen auf die verschiedenen Platten
+verteilt werden. Also eine komplette Datei auf einem Brick, die nächste vielleicht auf einen anderen usw.
+
+.. important::
+
+   Wenn du **replica** oder **stripe** benutzt, *musst* du darauf achten, dass
    du ein Vielfaches der angegebenen Anzahl an Bricks nutzt. Bei ``replica 2``
    zB. also 2, 4, 6, etc. Bricks.
 
-   Lässt du den Part ganz weg, wird weder *striping* noch *mirroring* benutzt.
-   Die Dateien werden einfach auf die verschiedenen Platten verteilt (JBOD
-   like).
+
+Volume aktivieren
+-----------------
 
 Nun muss das Volume nur noch aktiviert werden:
 
@@ -87,11 +114,14 @@ Nun kannst du loslegen und das Volume benutzen.
 Volume mounten
 --------------
 
-Auf jeden Client musst du die folgenden Schritte ausführen (statt dem
-GlusterFS Client kannst du auch NFS nutzen, das lass ich hier aber mal aus):
+Auf **jeden** *Client* musst du die folgenden Schritte ausführen:
 
+.. note::
 
-- FUSE muss installiert sein:
+  Statt dem *GlusterFS Client* kannst du auch NFS_ nutzen, das lass ich hier
+  aber mal aus.
+
+1. FUSE muss installiert sein:
 
   - Prüfe das mit ``# dmesg | grep -i fuse``
 
@@ -100,11 +130,11 @@ GlusterFS Client kannst du auch NFS nutzen, das lass ich hier aber mal aus):
 
   - ``# modprobe fuse``
 
-- Der GlusterFS Client musst installiert sein:
+2. Der GlusterFS Client musst installiert sein:
 
   ``# apt-get install glusterfs-client``
 
-- Nun kannst du das Volume mounten (zB. nach ``/var/shared``):
+3. Nun kannst du das Volume mounten (zB. nach ``/var/shared``):
 
   ``# mount -t glusterfs s1.test:/sharedstuff /var/shared``
 
@@ -114,11 +144,12 @@ GlusterFS Client kannst du auch NFS nutzen, das lass ich hier aber mal aus):
 
   .. note::
 
-     ``_netdev`` sorgt dafür, das es erst nach Initialisierung des Netzwerks
-     gemounted wird.
+     ``_netdev`` sorgt dafür, dass das Volumen es erst nach Initialisierung
+     des Netzwerks gemounted wird.
 
 Der beim Mounten angegebene Server (``s1.test``) wird *nur einmal* benutzt, um
-die Konfiguration zu holen, danach wird automatisch per Load-Balancing, etc.
-einer der am Volume beteiligten Server benutzt. Dh. auch, dass du beim
-``mount`` Befehl einen beliebigen Server aus dem Pool angeben kannst, auch
-einen, der nicht am zu mountenden Volume beteiligt ist.
+die Konfiguration zu holen, danach wird automatisch per *Load-Balancing*,
+einer der am Volume beteiligten Server benutzt.
+
+Dh. auch, dass du beim ``mount`` Befehl einen beliebigen Server aus dem Pool
+angeben kannst, auch einen, der nicht am zu mountenden Volume beteiligt ist.

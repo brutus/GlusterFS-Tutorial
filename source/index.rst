@@ -2,17 +2,17 @@
 GlusterFS Tutorial
 ==================
 
-A small introduction to GlutsterFS_.
+A small introduction to GlusterFS_.
 
 After a short introduction there's an overview of the required steps to setup
-some shared storage with GlusterFS, followed by step by step instructions.
+some shared storage with GlusterFS_, followed by step by step instructions.
 
 .. note:: Right now it's only available in *german language*.
 
 Contents
 --------
 
-Ein schnelles Step-By-Step Tutorial zum Erstellen von GlusterFS Volumes.
+Ein schnelles Step-By-Step Tutorial zum Erstellen von GlusterFS_ Volumes.
 
 .. toctree::
    :maxdepth: 2
@@ -20,6 +20,3 @@ Ein schnelles Step-By-Step Tutorial zum Erstellen von GlusterFS Volumes.
    Intro
    Overview
    Step by Step
-
-
-.. _GlutsterFS: http://www.gluster.org/
