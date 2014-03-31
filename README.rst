@@ -11,7 +11,7 @@ Online Version
 
 You can read the tutorial here:
 
-  ``http://glusterfs-tutorial.readthedocs.org/``
+http://glusterfs-tutorial.readthedocs.org/
 
 Right now it's only available in *german language*.
 
