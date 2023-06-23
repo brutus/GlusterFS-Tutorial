@@ -13,5 +13,11 @@ You can read the tutorial here: http://glusterfs-tutorial.readthedocs.org/
 
 Right now it's only available in *german language*.
 
+Usage
+-----
+
+After cloning, you can use `make clean html` to build the HTML output (to the
+_build/html_ directory), or use `make clean livehtml` for an auto-reloading
+development server.
 
 .. _GlusterFS: http://www.gluster.org/
